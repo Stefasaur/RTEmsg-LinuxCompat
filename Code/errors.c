@@ -12,9 +12,6 @@
  ******************************************************************************/
 
 #include "pch.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "main.h"
 #include "errors.h"
 #include "process_bin_data.h"

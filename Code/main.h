@@ -129,7 +129,7 @@ typedef struct _enum_data_t
 {
     char *name;                      /*!< Name of the enumerated value: filter, memo, in_file, out_file */
     enum enums_type_t type;          /*!< Type of data in the union */
-    union def_union
+    union
     {
         char *filter_description;    /*!< FILTER:   pointer to filter description (NULL if not specified) */
         FILE *p_file;                /*!< OUT_FILE: pointer to the file structure */
@@ -139,7 +139,7 @@ typedef struct _enum_data_t
                                         See the description of function 'get_selected_text()' for
                                         how the data is formatted - how it has to be prepared */
         double memo_value;           /*!< MEMO:     memorizing of temporary values */
-    };
+    } u;
     char *file_name;                 /*!< Name of the file defined with OUT_FILE() or IN_FILE() */
 } enum_data_t;
 

@@ -35,7 +35,7 @@
  *          false - if additional data might be in the next packet.
  */
 
-__inline bool message_complete(unsigned no_words)
+bool message_complete(unsigned no_words)
 {
     if (no_words < 5u)
     {
@@ -155,7 +155,7 @@ static uint32_t get_packet_length(uint32_t fmt_id)
  * @return Result as defined by the enum 'asm_msg_t'.
  */
 
-__inline asm_msg_t process_the_message_packet(unsigned no_words, uint32_t data)
+asm_msg_t process_the_message_packet(unsigned no_words, uint32_t data)
 {
     // Process the data contained in the FMT word
     g_msg.fmt_id = data >> g_msg.hdr_data.fmt_id_shift;
@@ -228,7 +228,7 @@ __inline asm_msg_t process_the_message_packet(unsigned no_words, uint32_t data)
  * @return Number of unfinished words skipped.
  */
 
-__inline unsigned skip_unfinished_words(void)
+unsigned skip_unfinished_words(void)
 {
     unsigned no_unfinished = 0;
     

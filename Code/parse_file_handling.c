@@ -13,7 +13,6 @@
 #include "pch.h"
 #include <time.h>
 #include "parse_file_handling.h"
-#include <windows.h>
 #include "files.h"
 #include "utf8_helpers.h"
 #include "main.h"
@@ -559,7 +558,7 @@ void read_file_to_indexed_text(const char *filename, parse_handle_t *parse_handl
     }
 
     *pos = 0;
-    g_msg.enums[g_msg.enums_found].in_file_txt = (char *)str;
+    g_msg.enums[g_msg.enums_found].u.in_file_txt = (char *)str;
     fclose(file);
 }
 

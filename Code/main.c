@@ -11,16 +11,7 @@
  ******************************************************************************/
 
 #include "pch.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <direct.h>
-#include <assert.h>
-#include <math.h>
-#include <locale.h>
-#include <windows.h>
-#include <sys/stat.h>
-#include <time.h>
+#include "platform_compat.h"
 #include "main.h"
 #include "parse_error_reporting.h"
 #include "rtedbg.h"
@@ -38,7 +29,9 @@
 #include "cmd_line.h"
 #include "utf8_helpers.h"
 
+#ifdef _MSC_VER
 #pragma comment(linker, "/STACK:8388608")       // Increase stack size to 8 MB
+#endif
 
 
 /**********************************************/
@@ -190,7 +183,7 @@ static void check_print_errors(void)
     {
         if (g_msg.enums[i].type == OUT_FILE_TYPE)
         {
-            check_file_errors(g_msg.enums[i].p_file, g_msg.enums[i].file_name);
+            check_file_errors(g_msg.enums[i].u.p_file, g_msg.enums[i].file_name);
         }
     }
 }

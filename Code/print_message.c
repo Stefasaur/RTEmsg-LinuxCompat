@@ -22,8 +22,15 @@
 #include "errors.h"
 
 
-#if _WIN64 != 1
-#error "The software was tested in the 64-bit mode only."
+#ifdef _WIN32
+    #if _WIN64 != 1
+    #error "The software was tested in the 64-bit mode only."
+    #endif
+#else
+    // On Linux, check for 64-bit
+    #if __SIZEOF_POINTER__ != 8
+    #error "The software was tested in the 64-bit mode only."
+    #endif
 #endif
 
 // Union for conversion between uint32_t and float
@@ -315,7 +322,7 @@ static void save_to_memo(rte_enum_t memo)
     {
         if (g_msg.enums[memo].type == MEMO_TYPE)
         {
-            g_msg.enums[memo].memo_value = g_msg.value.data_double;
+            g_msg.enums[memo].u.memo_value = g_msg.value.data_double;
         }
         else
         {
@@ -506,7 +513,7 @@ static void process_memo(value_format_t *fmt)
     {
         if ((g_msg.enums[fmt->get_memo].name != NULL) && (g_msg.enums[fmt->get_memo].type == MEMO_TYPE))
         {
-            g_msg.value.data_double = g_msg.enums[fmt->get_memo].memo_value;
+            g_msg.value.data_double = g_msg.enums[fmt->get_memo].u.memo_value;
             g_msg.value.data_i64 = (int64_t)g_msg.value.data_double;
             g_msg.value.data_u64 = (uint64_t)g_msg.value.data_double;
         }
@@ -808,7 +815,7 @@ static const char *get_selected_text(rte_enum_t in_file, unsigned index)
     {
         if ((g_msg.enums[in_file].type == Y_TEXT_TYPE) || (g_msg.enums[in_file].type == IN_FILE_TYPE))
         {
-            char *y_text = g_msg.enums[in_file].in_file_txt;
+            char *y_text = g_msg.enums[in_file].u.in_file_txt;
 
             if (y_text == NULL)
             {
@@ -1331,9 +1338,9 @@ static FILE *get_out_file(value_format_t *fmt)
     {
         if (g_msg.enums[out_file].type == OUT_FILE_TYPE)
         {
-            if (g_msg.enums[out_file].p_file != NULL)
+            if (g_msg.enums[out_file].u.p_file != NULL)
             {
-                out = g_msg.enums[out_file].p_file;
+                out = g_msg.enums[out_file].u.p_file;
             }
             else
             {

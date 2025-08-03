@@ -11,10 +11,7 @@
  ******************************************************************************/
 
 #include "pch.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <direct.h>
+#include "platform_compat.h"
 #include "main.h"
 #include "errors.h"
 #include "files.h"
@@ -31,8 +28,8 @@
 
 int64_t get_file_size(FILE *fp)
 {
-    _fseeki64(fp, 0, SEEK_END);
-    int64_t size = (int64_t)ftell(fp);
+    fseeki64_compat(fp, 0, SEEK_END);
+    int64_t size = (int64_t)ftelli64_compat(fp);
     rewind(fp);
     return size;
 }
@@ -45,7 +42,7 @@ int64_t get_file_size(FILE *fp)
 void jump_to_start_folder(void)
 {
     // Jump back to the start folder
-    if (_wchdir(g_msg.file.start_folder) != 0)
+    if (wchdir_compat(g_msg.file.start_folder) != 0)
     {
         report_error_and_exit(get_message_text(FATAL_CANT_CHANGE_TO_START_FOLDER),
             EXIT_FATAL_ERR_START_FOLDER);
@@ -111,7 +108,7 @@ void setup_working_folder_info(void)
         report_error_and_exit(TXT_CANT_GET_APP_START_FOLDER, EXIT_FATAL_ERR_PGMPTR);
     }
 
-    char *chr_position = strrchr(app_folder, '\\');
+    char *chr_position = strrchr(app_folder, PATH_SEPARATOR);
 
     if (chr_position != NULL)
     {

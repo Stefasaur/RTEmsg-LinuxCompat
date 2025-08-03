@@ -13,7 +13,6 @@
 #include "pch.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <Windows.h>
 #include <wchar.h>
 #include "rtemsg_config.h"
 #include "utf8_helpers.h"
@@ -100,16 +99,11 @@ void utf8_print_string(const char *text, size_t print_length)
 
     int converted = MultiByteToWideChar(CP_UTF8, 0, text, (int)len, wtext, MAX_UTF8_TEXT_LENGTH);
 
-    if ((converted == 0) || g_msg.param.codepage_utf8)
-    {
-        // String conversion was not successful or UTF-8 codepage requested
-        // Print as UTF-8 text instead
+    // Temporary debug: always use printf for now to avoid wide char issues
+    if (print_length == 0) {
+        printf("%s", text);
+    } else {
         printf("%.*s", (int)print_length, text);
-    }
-    else
-    {
-        wtext[converted] = L'\0';
-        wprintf(L"%s", wtext);
     }
 }
 

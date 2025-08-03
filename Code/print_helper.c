@@ -320,9 +320,9 @@ void dump_filter_names_to_file(void)
         const char *name = ""; // Default to an empty string if no name or description is available.
 
         // Use filter description if available, otherwise use the filter name
-        if (g_msg.enums[i].filter_description != NULL)
+        if (g_msg.enums[i].u.filter_description != NULL)
         {
-            name = g_msg.enums[i].filter_description;
+            name = g_msg.enums[i].u.filter_description;
         }
         else if (g_msg.enums[i].name != NULL)
         {

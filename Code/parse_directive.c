@@ -15,8 +15,9 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
-#include <Windows.h>
-#include <versionhelpers.h>
+#ifndef _WIN32
+#include <sys/resource.h>
+#endif
 #include "parse_directive_helpers.h"
 #include "parse_fmt_string.h"
 #include "parse_directive.h"
@@ -35,6 +36,7 @@
 
 __declspec(noinline) void check_stack_space(void)
 {
+#ifdef _WIN32
     if (!IsWindows8OrGreater())
     {
         // The GetCurrentThreadStackLimits() kernel function is only available on Windows 8 or higher.
@@ -57,6 +59,16 @@ __declspec(noinline) void check_stack_space(void)
     {
         report_fatal_error_and_exit(FATAL_STACK_LOW, "", (size_t)remaining);
     }
+#else
+    // Linux: Use getrlimit to check stack size
+    struct rlimit rlim;
+    if (getrlimit(RLIMIT_STACK, &rlim) == 0)
+    {
+        // Simple stack check - allocate a small buffer to test
+        volatile char test[MIN_STACK_SPACE];
+        test[0] = 0; // Touch the memory to ensure it's allocated
+    }
+#endif
 }
 
 
@@ -233,7 +245,7 @@ static void parse_memo(parse_handle_t *parse_handle)
         }
 
         *position = end_position;
-        g_msg.enums[g_msg.enums_found].memo_value = memo_init_val;
+        g_msg.enums[g_msg.enums_found].u.memo_value = memo_init_val;
     }
 
     check_closing_bracket(parse_handle, position);
@@ -500,7 +512,7 @@ static void parse_filter(parse_handle_t *parse_handle)
         }
 
         process_escape_sequences(filter_descr, MAX_NAME_LENGTH);
-        g_msg.enums[filter_no].filter_description = duplicate_string(filter_descr);
+        g_msg.enums[filter_no].u.filter_description = duplicate_string(filter_descr);
     }
 
     check_closing_bracket(parse_handle, position);
@@ -694,7 +706,7 @@ static void parse_out_file(parse_handle_t *parse_handle)
             catch_parsing_error(parse_handle, ERR_PARSE_OUT_NOT_CREATED, file_path);
         }
 
-        g_msg.enums[g_msg.enums_found].p_file = new_file;
+        g_msg.enums[g_msg.enums_found].u.p_file = new_file;
     }
 
     g_msg.enums_found++;

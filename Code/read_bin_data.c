@@ -815,9 +815,9 @@ static void print_filter_info(void)
 
         const char *name = "";
 
-        if (g_msg.enums[i].filter_description != NULL)
+        if (g_msg.enums[i].u.filter_description != NULL)
         {
-            name = g_msg.enums[i].filter_description;
+            name = g_msg.enums[i].u.filter_description;
         }
         else if (g_msg.enums[i].name != NULL)
         {

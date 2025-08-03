@@ -513,7 +513,7 @@ static void save_the_indexed_text_line(char **position, parse_handle_t *parse_ha
 
     g_msg.enums[g_msg.enums_found].name = "#Y_TEXT";
     g_msg.enums[g_msg.enums_found].type = Y_TEXT_TYPE;
-    g_msg.enums[g_msg.enums_found].in_file_txt = duplicate_string(buff);
+    g_msg.enums[g_msg.enums_found].u.in_file_txt = duplicate_string(buff);
     parse_handle->current_format->in_file = (rte_enum_t)g_msg.enums_found;
     g_msg.enums_found++;
     g_msg.fmt_ids_defined++;
